@@ -19,6 +19,7 @@ import Data.ByteString.Lazy as BL
 import Text.Hastache as H
 import Text.Hastache.Context as H
 
+import System.Directory (removeFile)
 import System.IO.Unsafe (unsafePerformIO)
 import System.FilePath
 import Paths_shake_extras (getDataFileName)
@@ -35,6 +36,7 @@ buildReportTemplate _jsfile _outfile = do
   js       <- B.readFile _jsfile
   template <- B.readFile (extrasDir </> "report.html")
   BL.writeFile _outfile =<< (hastacheStr H.defaultConfig template (context js))
+  removeFile _jsfile
   return ()
 
 context :: Monad m => B.ByteString -> MuContext m

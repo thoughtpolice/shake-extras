@@ -3,3 +3,6 @@
 *~
 dist/
 examples/*.shake*
+examples/tar
+examples/report.html
+examples/result.tar

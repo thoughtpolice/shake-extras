@@ -41,6 +41,7 @@ library
   build-depends:
     base       >= 4,
     filepath   >= 1,
+    directory  >= 1,
     bytestring >= 0.9,
     shake      >= 0.2.7,
     cmdargs    >= 0.9.3,
