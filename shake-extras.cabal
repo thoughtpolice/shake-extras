@@ -21,6 +21,13 @@ extra-source-files:
   AUTHORS.txt
   README.md
 
+data-files:
+  extras/bootstrap/css/*.css, extras/bootstrap/css/*.min.css
+  extras/bootstrap/img/*.png
+  extras/bootstrap/js/*.js, extras/bootstrap/js/*.min.js
+  extras/report.html
+  extras/jquery-1.7.1.min.js
+
 source-repository head
   type: git
   location: https://github.com/thoughtpolice/shake-extras.git
@@ -28,10 +35,16 @@ source-repository head
 library
   exposed-modules:
     Development.Shake.CLI
+    Development.Shake.Report
+  other-modules:
+    Paths_shake_extras
   build-depends:
     base       >= 4,
-    shake      >= 0.2.6,
-    cmdargs    >= 0.9.3
+    filepath   >= 1,
+    bytestring >= 0.9,
+    shake      >= 0.2.7,
+    cmdargs    >= 0.9.3,
+    hastache   >= 0.3
 
   ghc-options:        -Wall -O2 -funbox-strict-fields
                       -fwarn-tabs
@@ -45,8 +58,6 @@ library
 -- 
 --   build-depends:
 --     base       >= 4,
---     shake      >= 0.2.6,
---     cmdargs    >= 0.9.3
 --     shake-extras
 -- 
 --   ghc-options:      -Wall -fno-cse -fno-warn-orphans
