@@ -12,8 +12,8 @@
 -- shake build options.
 -- 
 module Development.Shake.CLI
-       ( options -- :: ShakeOptions
-       , shake'  -- :: Rules () -> IO ()
+       ( options       -- :: ShakeOptions
+       , shakeWithArgs -- :: Rules () -> IO ()
        ) where
 import System.FilePath ((<.>))
 import Control.Monad (when)
@@ -21,6 +21,8 @@ import Development.Shake as Shake
 import Development.Shake.Report as Shake
 import System.Console.CmdArgs as CA
 
+-- | A 'ShakeOptions' data structure with 
+-- annotations for CmdArgs already included.
 options :: ShakeOptions
 options 
   = ShakeOptions { shakeFiles     = ".shake" &= help "shake journal/db path"
@@ -32,8 +34,11 @@ options
                  , shakeVerbosity = Shake.Normal &= ignore
                  } &= verbosity
 
-shake' :: Rules () -> IO ()
-shake' r = do
+-- | Build a set of Shake rules, and let cmdargs take care of
+-- parsing command line arguments that may influence the used
+-- 'ShakeOptions'
+shakeWithArgs :: Rules () -> IO ()
+shakeWithArgs r = do
   x <- cmdArgs options
   v <- CA.getVerbosity
   case v of
@@ -42,4 +47,6 @@ shake' r = do
     CA.Loud   -> shake (x  { shakeVerbosity = Shake.Loud }) r
   
   when (shakeDump x) $ do
+    -- FIXME: custom output file?
+    putStrLn "creating build system report in 'report.html'"
     Shake.buildReportTemplate (shakeFiles x <.> ".js") "report.html"

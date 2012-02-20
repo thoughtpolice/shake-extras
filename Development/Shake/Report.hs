@@ -32,11 +32,11 @@ extrasDir = unsafePerformIO $ getDataFileName "extras"
 -- | Takes a filepath pointing to the Shake \".js\" profiling dump.
 -- Second path indicates the output file to write.
 buildReportTemplate :: FilePath -> FilePath -> IO ()
-buildReportTemplate _jsfile _outfile = do
-  js       <- B.readFile _jsfile
-  template <- B.readFile (extrasDir </> "report.html")
-  BL.writeFile _outfile =<< (hastacheStr H.defaultConfig template (context js))
-  removeFile _jsfile
+buildReportTemplate jsfile out = do
+  js       <- B.readFile jsfile
+  let conf = H.defaultConfig { muEscapeFunc = H.emptyEscape }
+  BL.writeFile out =<< (hastacheFile conf (extrasDir </> "report.html") (context js))
+  removeFile jsfile
   return ()
 
 context :: Monad m => B.ByteString -> MuContext m
