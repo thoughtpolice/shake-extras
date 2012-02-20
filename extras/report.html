@@ -8,7 +8,7 @@
     <meta name="author" content="N/A">
 
     <!-- Le styles -->
-    <link href="{{bootstrapcss}}" rel="stylesheet">
+    <style>{{bootstrapcss}}</style>
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -18,7 +18,7 @@
       .bar div {height: 10px; background-color:#6DC067;}
       .right {text-align: right;}
     </style>
-    <link href="{{bootstraprcss}}" rel="stylesheet">
+    <style>{{bootstraprcss}}</style>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -33,15 +33,22 @@
       </div> <!-- /page-header -->
 
       <div class="row">
-        <div class="span4" id="summary"></div>
+        <div class="span4" id="summary">
+          <h2>Overview</h2>
+          </div>
         <div class="span8" id="graph">
           <h2>Traced commands</h2>
-          <div id="shakeplot" style="width:400px;height:200px;"></div>
+          <div id="shakeplot" style="width:600px;height:200px;"></div>
         </div>
       </div> <!-- /row -->
+      <hr>
       <div class="row">
-        <div class="span6" id="rules"></div>
-        <div class="span6" id="commands"></div>
+        <div class="span6" id="rules">
+          <h2>Expensive rules</h2>
+        </div>
+        <div class="span6" id="commands">
+          <h2>Expensive commands</h2>
+        </div>
       </div> <!-- /row -->
     <hr>
     <footer>
@@ -53,9 +60,9 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{jquery}}"></script>
-    <script src="{{flot}}"></script>
-    <!-- <script src="{{bootstrapjs}}"></script> -->
+    <script>{{jquery}}</script>
+    <script>{{flot}}</script>
+    <!-- <script>{{bootstrapjs}}</script> -->
 
     <!-- Profiling output -->
     <script>{{shakedump}}</script>
@@ -212,7 +219,6 @@
       }
 
       var summary =
-        "<h2>Overview</h2>" + 
         "<ul>" +
         "<li><strong>Runs:</strong> This database has tracked " + built.length + " run" + plural(built.length) + ".</li>" +
         "<li><strong>Rules:</strong> There are " + shake.length + " rules (" + countLast + " rebuilt in the last run).</li>" +
@@ -221,7 +227,7 @@
         "<li><strong>Longest steps:</strong> The longest rule takes " + showTime(maxExecution) + ", and the longest traced command takes " + showTime(maxTrace) + ".</li>" +
         "<li><strong>Parallelism:</strong> Last run gave an average parallelism of " + (sumTrace / maxTraceStopLast).toFixed(2) + " times over " + showTime(maxTraceStopLast) + ".</li>" +
         "</ul>";
-      $('#summary').html(summary);
+      $('#summary').append(summary);
 
 
       /////////////////////////////////////////////////////////////////
@@ -257,19 +263,24 @@
         maxBucket = Math.max(maxBucket, buckets[i]);
       maxBucket = Math.ceil(maxBucket - 0.00001);
 
-      var url = "cht=lc&amp;chs=500x250&amp;chco=22AA47&amp;chm=B,6DC097,0,0,0&amp;chxt=y&amp;chxl=0:|0|" + maxBucket + "&amp;chls=3,1,0&amp;chd=t:";
       plotvals = [];
-      for (var i = 0; i < countBuckets; i++) {
+      for (var i = 0; i < countBuckets; i++)
         plotvals.push([i, (buckets[i] * 100 / maxBucket)]);
-        //url += (i == 0 ? "" : ",") + (buckets[i] * 100 / maxBucket);
-      }
+
       $.plot($('#shakeplot'), [plotvals]);
 
       /////////////////////////////////////////////////////////////////
       // MOST EXPENSIVE RULES
 
       var top = shake.slice(0).sort(function(a,b){return b.execution-a.execution}).slice(0,15);
-      var rules = "<h2>Expensive rules</h2><br/><table id='details'>";
+      var rules = "<table id='details' class='table'>";
+      rules +=      "<thead><tr>";
+      rules +=        "<th>Bar</th>";
+      rules +=        "<th>Time</th>";
+      rules +=        "<th>Overall %</th>";
+      rules +=        "<th>Rule</th>";
+      rules +=      "</tr></thead>";
+      rules += "<tbody>";
       for (var i = 0; i < top.length; i++)
       {
         rules += "<tr>" +
@@ -279,8 +290,8 @@
           "<td>" + top[i].name + "</td>" +
           "</tr>";
       }
-      rules += "</table>";
-      $('#rules').html(rules);
+      rules += "</tbody></table>";
+      $('#rules').append(rules);
 
       /////////////////////////////////////////////////////////////////
       // MOST EXPENSIVE COMMANDS
@@ -295,7 +306,15 @@
       }
 
       toolList = huffman(15, tooList);
-      var commands = "<h2>Expensive commands</h2><br/><table id='details'>";
+      var commands = "<table id='details' class='table'>";
+      commands +=      "<thead><tr>";
+      commands +=        "<th>Bar</th>";
+      commands +=        "<th>Time</th>";
+      commands +=        "<th>Overall %</th>";
+      commands +=        "<th>Invocations</th>";
+      commands +=        "<th>Name</th>";
+      commands +=      "</tr></thead>";
+      commands += "<tbody>";
       for (var i = 0; i < toolList.length; i++)
       {
         commands += "<tr>" +
@@ -306,8 +325,8 @@
           "<td>" + toolList[i].name + "</td>" +
           "</tr>";
       }
-      commands += "</table>";
-      $('#commands').html(commands);
+      commands += "</tbody></table>";
+      $('#commands').append(commands);
     }
     </script>
   </body>

@@ -12,7 +12,7 @@
 -- shake build options.
 -- 
 module Development.Shake.Report
-       ( buildReportTemplate -- :: FilePath -> FilePath -> IO ()
+       ( buildReport -- :: FilePath -> FilePath -> IO ()
        ) where
 import Data.ByteString as B (ByteString, readFile)
 import Data.ByteString.Lazy as BL
@@ -24,6 +24,15 @@ import System.IO.Unsafe (unsafePerformIO)
 import System.FilePath
 import Paths_shake_extras (getDataFileName)
 
+data ReportCtx
+  = C { ctxBootstrapCSS  :: B.ByteString
+      , ctxBootstrapRCSS :: B.ByteString
+      , ctxBootstrapJS   :: B.ByteString
+      , ctxJquery        :: B.ByteString
+      , ctxFlot          :: B.ByteString
+      , ctxShakeDump     :: B.ByteString
+      }
+
 -- | Path to extras directory so we can find the report template, etc.
 extrasDir :: FilePath
 extrasDir = unsafePerformIO $ getDataFileName "extras"
@@ -31,21 +40,28 @@ extrasDir = unsafePerformIO $ getDataFileName "extras"
 
 -- | Takes a filepath pointing to the Shake \".js\" profiling dump.
 -- Second path indicates the output file to write.
-buildReportTemplate :: FilePath -> FilePath -> IO ()
-buildReportTemplate jsfile out = do
-  js       <- B.readFile jsfile
+buildReport :: FilePath -> FilePath -> IO ()
+buildReport jsfile out = do
+  bcss    <- B.readFile $ bdir </> "css" </> "bootstrap.min.css"
+  brcss   <- B.readFile $ bdir </> "css" </> "bootstrap-responsive.min.css"
+  bjs     <- B.readFile $ bdir </> "js" </> "bootstrap.min.js"
+  jquery  <- B.readFile $ extrasDir </> "jquery-1.6.4.min.js"
+  flot    <- B.readFile $ extrasDir </> "jquery.flot.min.js"
+  shakejs <- B.readFile jsfile
+
   let conf = H.defaultConfig { muEscapeFunc = H.emptyEscape }
-  BL.writeFile out =<< (hastacheFile conf (extrasDir </> "report.html") (context js))
+  let ctx  = C bcss brcss bjs jquery flot shakejs
+  BL.writeFile out =<< (hastacheFile conf (extrasDir </> "report.html") (context ctx))
 --  removeFile jsfile
   return ()
-
-context :: Monad m => B.ByteString -> MuContext m
-context shakejs = H.mkStrContext $ \name -> case name of
-  "bootstrapcss"  -> MuVariable $ bdir </> "css" </> "bootstrap.min.css"
-  "bootstraprcss" -> MuVariable $ bdir </> "css" </> "bootstrap-responsive.min.css"  
-  "bootstrapjs"   -> MuVariable $ bdir </> "js" </> "bootstrap.min.js"
-  "jquery"        -> MuVariable $ extrasDir </> "jquery-1.6.4.min.js"
-  "flot"          -> MuVariable $ extrasDir </> "jquery.flot.min.js"
-  "shakedump"     -> MuVariable $ shakejs
-  _               -> MuNothing
  where bdir = extrasDir </> "bootstrap"
+
+context :: Monad m => ReportCtx -> MuContext m
+context ctx = H.mkStrContext $ \name -> case name of
+  "bootstrapcss"  -> MuVariable $ ctxBootstrapCSS ctx
+  "bootstraprcss" -> MuVariable $ ctxBootstrapRCSS ctx
+  "bootstrapjs"   -> MuVariable $ ctxBootstrapJS ctx
+  "jquery"        -> MuVariable $ ctxJquery ctx
+  "flot"          -> MuVariable $ ctxFlot ctx
+  "shakedump"     -> MuVariable $ ctxShakeDump ctx
+  _               -> MuNothing
