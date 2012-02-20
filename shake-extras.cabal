@@ -28,6 +28,7 @@ data-files:
   extras/report.html
   extras/jquery-1.6.4.min.js
   extras/jquery.flot.min.js
+  extras/shake.js
 
 source-repository head
   type: git

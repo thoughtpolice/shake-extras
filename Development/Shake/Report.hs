@@ -19,7 +19,7 @@ import Data.ByteString.Lazy as BL
 import Text.Hastache as H
 import Text.Hastache.Context as H
 
-import System.Directory (removeFile)
+--import System.Directory (removeFile)
 import System.IO.Unsafe (unsafePerformIO)
 import System.FilePath
 import Paths_shake_extras (getDataFileName)
@@ -30,6 +30,7 @@ data ReportCtx
       , ctxBootstrapJS   :: B.ByteString
       , ctxJquery        :: B.ByteString
       , ctxFlot          :: B.ByteString
+      , ctxShakeJS       :: B.ByteString
       , ctxShakeDump     :: B.ByteString
       }
 
@@ -47,10 +48,11 @@ buildReport jsfile out = do
   bjs     <- B.readFile $ bdir </> "js" </> "bootstrap.min.js"
   jquery  <- B.readFile $ extrasDir </> "jquery-1.6.4.min.js"
   flot    <- B.readFile $ extrasDir </> "jquery.flot.min.js"
-  shakejs <- B.readFile jsfile
+  shakejs <- B.readFile $ extrasDir </> "shake.js"
+  dump <- B.readFile jsfile
 
   let conf = H.defaultConfig { muEscapeFunc = H.emptyEscape }
-  let ctx  = C bcss brcss bjs jquery flot shakejs
+  let ctx  = C bcss brcss bjs jquery flot shakejs dump
   BL.writeFile out =<< (hastacheFile conf (extrasDir </> "report.html") (context ctx))
 --  removeFile jsfile
   return ()
@@ -63,5 +65,6 @@ context ctx = H.mkStrContext $ \name -> case name of
   "bootstrapjs"   -> MuVariable $ ctxBootstrapJS ctx
   "jquery"        -> MuVariable $ ctxJquery ctx
   "flot"          -> MuVariable $ ctxFlot ctx
+  "shakejs"       -> MuVariable $ ctxShakeJS ctx
   "shakedump"     -> MuVariable $ ctxShakeDump ctx
   _               -> MuNothing
