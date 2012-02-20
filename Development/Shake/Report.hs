@@ -36,12 +36,13 @@ buildReportTemplate jsfile out = do
   js       <- B.readFile jsfile
   let conf = H.defaultConfig { muEscapeFunc = H.emptyEscape }
   BL.writeFile out =<< (hastacheFile conf (extrasDir </> "report.html") (context js))
-  removeFile jsfile
+--  removeFile jsfile
   return ()
 
 context :: Monad m => B.ByteString -> MuContext m
 context shakejs = H.mkStrContext $ \name -> case name of
   "bootstrapcss"  -> MuVariable $ bdir </> "css" </> "bootstrap.min.css"
+  "bootstraprcss" -> MuVariable $ bdir </> "css" </> "bootstrap-responsive.min.css"  
   "bootstrapjs"   -> MuVariable $ bdir </> "js" </> "bootstrap.min.js"
   "jquery"        -> MuVariable $ extrasDir </> "jquery-1.7.1.min.js"
   "shakedump"     -> MuVariable $ shakejs

@@ -48,5 +48,5 @@ shakeWithArgs r = do
   
   when (shakeDump x) $ do
     -- FIXME: custom output file?
-    putStrLn "creating build system report in 'report.html'"
+    putStrLn "note: creating build system report in 'report.html'"
     Shake.buildReportTemplate (shakeFiles x <.> ".js") "report.html"
