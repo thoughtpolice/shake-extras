@@ -34,7 +34,10 @@
 
       <div class="row">
         <div class="span4" id="summary"></div>
-        <div class="offset8" id="graph"></div>
+        <div class="span8" id="graph">
+          <h2>Traced commands</h2>
+          <div id="shakeplot" style="width:400px;height:200px;"></div>
+        </div>
       </div> <!-- /row -->
       <div class="row">
         <div class="span6" id="rules"></div>
@@ -51,7 +54,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{jquery}}"></script>
-    <script src="{{bootstrapjs}}"></script>
+    <script src="{{flot}}"></script>
+    <!-- <script src="{{bootstrapjs}}"></script> -->
 
     <!-- Profiling output -->
     <script>{{shakedump}}</script>
@@ -208,6 +212,7 @@
       }
 
       var summary =
+        "<h2>Overview</h2>" + 
         "<ul>" +
         "<li><strong>Runs:</strong> This database has tracked " + built.length + " run" + plural(built.length) + ".</li>" +
         "<li><strong>Rules:</strong> There are " + shake.length + " rules (" + countLast + " rebuilt in the last run).</li>" +
@@ -253,13 +258,12 @@
       maxBucket = Math.ceil(maxBucket - 0.00001);
 
       var url = "cht=lc&amp;chs=500x250&amp;chco=22AA47&amp;chm=B,6DC097,0,0,0&amp;chxt=y&amp;chxl=0:|0|" + maxBucket + "&amp;chls=3,1,0&amp;chd=t:";
-      for (var i = 0; i < countBuckets; i++)
-        url += (i == 0 ? "" : ",") + (buckets[i] * 100 / maxBucket);
-
-      var graph =
-        "<h2>Traced commands</h2><br/>" +
-        "<img style='margin-top:5px;' width='300' height='100' src='https://chart.googleapis.com/chart?" + url + "' />";
-      $('#graph').html(graph);
+      plotvals = [];
+      for (var i = 0; i < countBuckets; i++) {
+        plotvals.push([i, (buckets[i] * 100 / maxBucket)]);
+        //url += (i == 0 ? "" : ",") + (buckets[i] * 100 / maxBucket);
+      }
+      $.plot($('#shakeplot'), [plotvals]);
 
       /////////////////////////////////////////////////////////////////
       // MOST EXPENSIVE RULES

@@ -44,7 +44,8 @@ context shakejs = H.mkStrContext $ \name -> case name of
   "bootstrapcss"  -> MuVariable $ bdir </> "css" </> "bootstrap.min.css"
   "bootstraprcss" -> MuVariable $ bdir </> "css" </> "bootstrap-responsive.min.css"  
   "bootstrapjs"   -> MuVariable $ bdir </> "js" </> "bootstrap.min.js"
-  "jquery"        -> MuVariable $ extrasDir </> "jquery-1.7.1.min.js"
+  "jquery"        -> MuVariable $ extrasDir </> "jquery-1.6.4.min.js"
+  "flot"          -> MuVariable $ extrasDir </> "jquery.flot.min.js"
   "shakedump"     -> MuVariable $ shakejs
   _               -> MuNothing
  where bdir = extrasDir </> "bootstrap"
