@@ -15,7 +15,7 @@ module Development.Shake.CLI
        ( options -- :: ShakeOptions
        , shake'  -- :: Rules () -> IO ()
        ) where
-
+import System.FilePath ((<.>))
 import Control.Monad (when)
 import Development.Shake as Shake
 import Development.Shake.Report as Shake
@@ -42,4 +42,4 @@ shake' r = do
     CA.Loud   -> shake (x  { shakeVerbosity = Shake.Loud }) r
   
   when (shakeDump x) $ do
-    Shake.buildReportTemplate ".shake.js" "report.html"
+    Shake.buildReportTemplate (shakeFiles x <.> ".js") "report.html"
