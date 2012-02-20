@@ -35,20 +35,37 @@
       <div class="row">
         <div class="span4" id="summary">
           <h2>Overview</h2>
-          </div>
+        </div> <!-- /span -->
         <div class="span8" id="graph">
           <h2>Traced commands</h2>
           <div id="shakeplot" style="width:600px;height:200px;"></div>
-        </div>
+        </div> <!-- /span -->
       </div> <!-- /row -->
       <hr>
       <div class="row">
         <div class="span6" id="rules">
           <h2>Expensive rules</h2>
-        </div>
+          <table id='rule-details' class='table'>
+            <thead><tr>
+              <th>Bar</th>
+              <th>Time</th>
+              <th>Overall %</th>
+              <th>Rule</th>
+            </tr></thead>
+          </table>
+        </div> <!-- /span -->
         <div class="span6" id="commands">
           <h2>Expensive commands</h2>
-        </div>
+          <table id='cmd-details' class='table'>
+            <thead><tr>
+              <th>Bar</th>
+              <th>Time</th>
+              <th>Overall %</th>
+              <th>Invocations</th>
+              <th>Name</th>
+            </tr></thead>
+          </table>
+        </div> <!-- /span -->
       </div> <!-- /row -->
     <hr>
     <footer>
@@ -273,14 +290,7 @@
       // MOST EXPENSIVE RULES
 
       var top = shake.slice(0).sort(function(a,b){return b.execution-a.execution}).slice(0,15);
-      var rules = "<table id='details' class='table'>";
-      rules +=      "<thead><tr>";
-      rules +=        "<th>Bar</th>";
-      rules +=        "<th>Time</th>";
-      rules +=        "<th>Overall %</th>";
-      rules +=        "<th>Rule</th>";
-      rules +=      "</tr></thead>";
-      rules += "<tbody>";
+      var rules = "<tbody>";
       for (var i = 0; i < top.length; i++)
       {
         rules += "<tr>" +
@@ -290,8 +300,8 @@
           "<td>" + top[i].name + "</td>" +
           "</tr>";
       }
-      rules += "</tbody></table>";
-      $('#rules').append(rules);
+      rules += "</tbody>";
+      $('#rule-details').append(rules);
 
       /////////////////////////////////////////////////////////////////
       // MOST EXPENSIVE COMMANDS
@@ -306,15 +316,7 @@
       }
 
       toolList = huffman(15, tooList);
-      var commands = "<table id='details' class='table'>";
-      commands +=      "<thead><tr>";
-      commands +=        "<th>Bar</th>";
-      commands +=        "<th>Time</th>";
-      commands +=        "<th>Overall %</th>";
-      commands +=        "<th>Invocations</th>";
-      commands +=        "<th>Name</th>";
-      commands +=      "</tr></thead>";
-      commands += "<tbody>";
+      var commands = "<tbody>";
       for (var i = 0; i < toolList.length; i++)
       {
         commands += "<tr>" +
@@ -325,8 +327,8 @@
           "<td>" + toolList[i].name + "</td>" +
           "</tr>";
       }
-      commands += "</tbody></table>";
-      $('#commands').append(commands);
+      commands += "</tbody>";
+      $('#cmd-details').append(commands);
     }
     </script>
   </body>
