@@ -38,7 +38,7 @@
         </div> <!-- /span -->
         <div class="span8" id="graph">
           <h2>Traced commands</h2>
-          <div id="shakeplot" style="width:600px;height:200px;"></div>
+          <div id="shakeplot" style="width:80%;height:200px;"></div>
         </div> <!-- /span -->
       </div> <!-- /row -->
       <hr>
@@ -283,7 +283,6 @@
       plotvals = [];
       for (var i = 0; i < countBuckets; i++)
         plotvals.push([i, (buckets[i] * 100 / maxBucket)]);
-
       $.plot($('#shakeplot'), [plotvals]);
 
       /////////////////////////////////////////////////////////////////
