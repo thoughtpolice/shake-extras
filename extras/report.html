@@ -6,20 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Shake summary report">
     <meta name="author" content="N/A">
-
     <!-- Le styles -->
     <style>{{bootstrapcss}}</style>
     <style>
       body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        padding-top: 20px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
-      td {vertical-align:top;}
-      td.bar {vertical-align:middle;}
-      .bar div {height: 10px; background-color:#6DC067;}
-      .right {text-align: right;}
     </style>
     <style>{{bootstraprcss}}</style>
-
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -47,7 +41,7 @@
           <h2>Expensive rules</h2>
           <table id='rule-details' class='table'>
             <thead><tr>
-              <th>Bar</th>
+              <th></th>
               <th>Time</th>
               <th>Overall %</th>
               <th>Rule</th>
@@ -58,7 +52,7 @@
           <h2>Expensive commands</h2>
           <table id='cmd-details' class='table'>
             <thead><tr>
-              <th>Bar</th>
+              <th></th>
               <th>Time</th>
               <th>Overall %</th>
               <th>Invocations</th>
@@ -293,7 +287,8 @@
       for (var i = 0; i < top.length; i++)
       {
         rules += "<tr>" +
-          "<td class='bar'><div style='width:" + (top[i].execution * 40 / top[0].execution) + "px;'> </div></td>" +
+          "<td><div class='progress progress-success' style='height: 10px'>" +
+          "<div class='bar' style='width:" + (top[i].execution * 40 / top[0].execution) + "px;'></div></div></td>" +
           "<td class='right'>" + showTime(top[i].execution) + "</td>" +
           "<td class='right'>" + showPerc(top[i].execution / sumExecution) + "</td>" +
           "<td>" + top[i].name + "</td>" +
@@ -319,7 +314,8 @@
       for (var i = 0; i < toolList.length; i++)
       {
         commands += "<tr>" +
-          "<td class='bar'><div style='width:" + (toolList[i].sum * 40 / toolList[0].sum) + "px;'> </div></td>" +
+          "<td><div class='progress progress-success' style='height: 10px'>" +
+          "<div class='bar' style='width:" + (toolList[i].sum * 40 / toolList[0].sum) + "px;'></div></div></td>" +
           "<td class='right'>" + showTime(toolList[i].sum) + "</td>" +
           "<td class='right'>" + showPerc(toolList[i].sum / sumExecution) + "</td>" +
           "<td class='right'>" + + toolList[i].count + "&nbsp;&times;</td>" +
