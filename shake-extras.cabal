@@ -28,15 +28,13 @@ source-repository head
 library
   exposed-modules:
     Development.Shake.CLI
-  other-modules:
-    Paths_shake_extras
   build-depends:
     base       >= 4,
     filepath   >= 1,
     directory  >= 1,
     bytestring >= 0.9,
     shake      == 0.2.8,
-    cmdargs    >= 0.9.3,
+    cmdargs    >= 0.9.3
 
   ghc-options:        -Wall -O2 -funbox-strict-fields
                       -fwarn-tabs
