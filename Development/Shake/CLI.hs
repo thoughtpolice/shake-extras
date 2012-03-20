@@ -15,7 +15,6 @@ module Development.Shake.CLI
        ( options       -- :: ShakeOptions
        , shakeWithArgs -- :: Rules () -> IO ()
        ) where
-import System.FilePath ((<.>))
 import Control.Monad (when)
 import Development.Shake as Shake
 import System.Console.CmdArgs as CA
