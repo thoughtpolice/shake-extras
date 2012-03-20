@@ -9,6 +9,8 @@ Install the latest version of the bindings from Hackage:
 
     $ cabal install shake-extras
 
+[travis-ci.org](http://travis-ci.org) results: [![Build Status](https://secure.travis-ci.org/thoughtpolice/shake-extras.png?branch=master)](http://travis-ci.org/thoughtpolice/shake-extras)
+
 # Join in
 
 File bugs in the GitHub [issue tracker][].
