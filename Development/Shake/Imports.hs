@@ -1,10 +1,18 @@
-{-# language FlexibleInstances, MultiParamTypeClasses, GeneralizedNewtypeDeriving,
-    DeriveDataTypeable, PatternGuards, ScopedTypeVariables #-}
-
--- | Module to search imports. Imports are files that are needed
--- for compilation of a source code file.
--- (This module is experimental.)
-
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving, DeriveDataTypeable #-}
+{-# LANGUAGE PatternGuards, ScopedTypeVariables #-}
+-- |
+-- Module      : Development.Shake.CLI
+-- Copyright   : (c) Austin Seipp 2012
+-- License     : BSD3
+--
+-- Author      : Soenke Hahn
+-- Maintainer  : mad.one@gmail.com
+-- Stability   : experimental
+-- Portability : GHC probably
+--
+-- Module to search imports. Imports are files that are needed for
+-- compilation of a source code file.  (This module is experimental.)
 module Development.Shake.Imports (
     -- * declaring rules for imports
     importsRule,
@@ -14,7 +22,6 @@ module Development.Shake.Imports (
     directImports,
     transitiveImports,
   ) where
-
 
 import Data.List
 import Data.Char
@@ -55,8 +62,8 @@ importsRule ruleApplies getDirectDependencies = do
 
     isDirectImportKey ?> \ importsFile -> do
         let sourceFile = dropExtension importsFile
-        directImports <- getDirectDependencies sourceFile
-        writeFileChanged importsFile (unlines directImports)
+        directImports' <- getDirectDependencies sourceFile
+        writeFileChanged importsFile (unlines directImports')
 
     let isTransitiveImportKey file =
             ("//*.transitiveImports" ?== file) &&
@@ -64,11 +71,11 @@ importsRule ruleApplies getDirectDependencies = do
 
     isTransitiveImportKey ?> \ transitiveImportsFile -> do
         let directImportsFile = replaceExtension transitiveImportsFile ".directImports"
-        directImports :: [FilePath] <- readFileLines directImportsFile
-        transitiveImports <- concat <$> mapM readFileLines
-                            (map (<.> ".transitiveImports") directImports)
+        directImports' :: [FilePath] <- readFileLines directImportsFile
+        transitiveImports' <- concat <$> mapM readFileLines
+                            (map (<.> ".transitiveImports") directImports')
         writeFileChanged transitiveImportsFile
-            (unlines $ nub $ directImports ++ transitiveImports)
+            (unlines $ nub $ directImports' ++ transitiveImports')
 
     return ()
 
@@ -84,15 +91,15 @@ importsDefaultHaskell sourceDirs =
     importsRule ("//*.hs" ?==) (getHaskellDependencies sourceDirs)
   where
     getHaskellDependencies :: [FilePath] -> FilePath -> Action [FilePath]
-    getHaskellDependencies sourceDirs file =
+    getHaskellDependencies source file =
         readFile' file >>=
         return . hsImports >>=
         return . map moduleToFile >>=
-        mapM (searchInPaths sourceDirs) >>=
+        mapM (searchInPaths source) >>=
         return . catMaybes
 
     hsImports :: String -> [String]
-    hsImports xs = [ takeWhile (\x -> isAlphaNum x || x `elem` "._") $ dropWhile (not . isUpper) x
+    hsImports xs = [ takeWhile (\z -> isAlphaNum z || z `elem` "._") $ dropWhile (not . isUpper) x
                    | x <- lines xs, "import " `isPrefixOf` x]
 
     moduleToFile :: String -> FilePath

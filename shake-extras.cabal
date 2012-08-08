@@ -1,8 +1,9 @@
 name:                shake-extras
 version:             0.0
 synopsis:            Extra utilities for shake build systems
-description:         
-  TODO
+description:
+  This package is designed to add supporting modules for the Shake
+  build system, that shouldn't be included in the core package.
 homepage:            http://thoughtpolice.github.com/shake-extras
 bug-reports:         http://github.com/thoughtpolice/shake-extras/issues
 license:             BSD3
@@ -29,12 +30,12 @@ library
     Development.Shake.CLI
     Development.Shake.Imports
   build-depends:
-    base       >= 4,
-    filepath   >= 1,
-    directory  >= 1,
-    bytestring >= 0.9,
-    shake      == 0.2.8,
-    cmdargs    >= 0.9.3
+    base       >= 4 && < 5,
+    filepath,
+    directory,
+    bytestring,
+    shake      == 0.3,
+    cmdargs    >= 0.9
 
   ghc-options:        -Wall -O2 -funbox-strict-fields
                       -fwarn-tabs
