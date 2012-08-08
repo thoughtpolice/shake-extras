@@ -29,7 +29,9 @@ options
                  , shakeReport    = Nothing  &= help "dump profiling report" &= name "prof" &= typFile
                  , shakeLint      = False    &= help "run build system linter" &= name "lint"
                  , shakeVerbosity = Shake.Normal &= ignore
-                 } &= verbosity
+                 }
+    &= verbosity
+    &= helpArg [explicit, name "h", name "help", groupname "Common flags"]
 
 -- | Build a set of Shake rules, and let cmdargs take care of
 -- parsing command line arguments that may influence the used

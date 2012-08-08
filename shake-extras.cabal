@@ -18,8 +18,7 @@ tested-with:         GHC == 7.0.4,
                      GHC == 7.4.1
 
 extra-source-files:
-  AUTHORS.txt
-  README.md
+  AUTHORS.txt README.md
 
 source-repository head
   type: git
@@ -28,6 +27,7 @@ source-repository head
 library
   exposed-modules:
     Development.Shake.CLI
+    Development.Shake.Imports
   build-depends:
     base       >= 4,
     filepath   >= 1,
