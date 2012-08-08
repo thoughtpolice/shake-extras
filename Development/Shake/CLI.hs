@@ -7,9 +7,8 @@
 -- Stability   : experimental
 -- Portability : GHC probably
 -- 
--- This module provides a convenient
--- cmdargs style interface for controlling
--- shake build options.
+-- This module provides a convenient cmdargs style interface for
+-- controlling shake build options.
 -- 
 module Development.Shake.CLI
        ( options       -- :: ShakeOptions
