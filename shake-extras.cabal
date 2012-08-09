@@ -1,5 +1,5 @@
 name:                shake-extras
-version:             0.1
+version:             0.1.1
 synopsis:            Extra utilities for shake build systems
 description:
   This package is designed to add supporting modules for the Shake
