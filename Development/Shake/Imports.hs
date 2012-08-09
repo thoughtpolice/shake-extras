@@ -2,17 +2,17 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving, DeriveDataTypeable #-}
 {-# LANGUAGE PatternGuards, ScopedTypeVariables #-}
 -- |
--- Module      : Development.Shake.CLI
--- Copyright   : (c) Austin Seipp 2012
+-- Module      : Development.Shake.Imports
+-- Copyright   : (c) Soenke Hahn 2012
 -- License     : BSD3
 --
--- Author      : Soenke Hahn
 -- Maintainer  : mad.one@gmail.com
 -- Stability   : experimental
 -- Portability : GHC probably
 --
 -- Module to search imports. Imports are files that are needed for
 -- compilation of a source code file.  (This module is experimental.)
+--
 module Development.Shake.Imports (
     -- * declaring rules for imports
     importsRule,
